@@ -15,9 +15,12 @@ namespace httpFunc
         }
 
         [Function(nameof(queueTrigger))]
-        public void Run([QueueTrigger("myqueue-items", Connection = "")] QueueMessage message)
+        [QueueOutput("outputqueue")]
+        public string Run([QueueTrigger("queue1", Connection = "StorageConnectionString")] QueueMessage message)
         {
             _logger.LogInformation($"C# Queue trigger function processed: {message.MessageText}");
+
+            return "testString";
         }
     }
 }
