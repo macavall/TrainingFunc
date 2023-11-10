@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using System.IO;
+using System.Text.Json;
 
 namespace httpFunc
 {
@@ -28,20 +30,19 @@ namespace httpFunc
 
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            //Thread.Sleep(20000);
+            // Read the request body and parse it into a JSON object
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var data = JsonDocument.Parse(requestBody);
 
-            // Try Catch Example for catching an Exception
-            try
+            // Extract the 'name' property from the JSON object
+            if (data.RootElement.TryGetProperty("name", out var nameElement))
             {
-                await ThrowException();
+                var name = nameElement.GetString();
+                // Now you can use the 'name' variable in your code
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogInformation(ex.StackTrace);
-                
-                AlreadyFailed = true;
-
-                ThrowException();
+                _logger.LogInformation("Name not found in the request body.");
             }
 
             return response;

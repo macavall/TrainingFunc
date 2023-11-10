@@ -2,7 +2,8 @@
     "version": "2.0",
     "extensions": {
         "http": {
-            "maxConcurrentRequests": 1
+            "maxConcurrentRequests": 1,
+            "maxOutstandingRequests": 5
         }
     },
     "logging": {
