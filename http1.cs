@@ -3,6 +3,8 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System.Threading;
+using System.Threading.Tasks;
+using System;
 
 namespace httpFunc
 {
@@ -16,18 +18,34 @@ namespace httpFunc
         }
 
         [Function("http1")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req)
+        public async Task<string> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req)
         {
+            _logger.LogInformation(req.Body.ToString());
+
+            // Set response string variable to Empty
+            string response = String.Empty;
+
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            
+            //Thread.Sleep(20000);
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-
-            response.WriteString("Welcome to Azure Functions!");
+            // Try Catch Example for catching an Exception
+            try
+            {
+                ThrowException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.StackTrace);
+                System.Console.WriteLine(ex.StackTrace);
+            }
 
             return response;
+        }
+
+        public async Task ThrowException()
+        {
+            throw new System.Exception();
         }
     }
 }
