@@ -27,33 +27,11 @@ namespace httpFunc
 
             // Set response string variable to Empty
             string response = String.Empty;
+            response = "Hello World!";
 
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            // Read the request body and parse it into a JSON object
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var data = JsonDocument.Parse(requestBody);
-
-            // Extract the 'name' property from the JSON object
-            if (data.RootElement.TryGetProperty("name", out var nameElement))
-            {
-                var name = nameElement.GetString();
-                // Now you can use the 'name' variable in your code
-            }
-            else
-            {
-                _logger.LogInformation("Name not found in the request body.");
-            }
-
             return response;
-        }
-
-        public async Task ThrowException()
-        {
-            if (AlreadyFailed == false)
-            {
-                throw new System.Exception();
-            }
         }
     }
 }
