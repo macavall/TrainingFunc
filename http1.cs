@@ -11,6 +11,7 @@ namespace httpFunc
     public class http1
     {
         private readonly ILogger _logger;
+        private bool AlreadyFailed = false;
 
         public http1(ILoggerFactory loggerFactory)
         {
@@ -32,12 +33,15 @@ namespace httpFunc
             // Try Catch Example for catching an Exception
             try
             {
-                ThrowException();
+                await ThrowException();
             }
             catch (Exception ex)
             {
                 _logger.LogInformation(ex.StackTrace);
-                System.Console.WriteLine(ex.StackTrace);
+                
+                AlreadyFailed = true;
+
+                ThrowException();
             }
 
             return response;
@@ -45,7 +49,10 @@ namespace httpFunc
 
         public async Task ThrowException()
         {
-            throw new System.Exception();
+            if (AlreadyFailed == false)
+            {
+                throw new System.Exception();
+            }
         }
     }
 }
